@@ -135,6 +135,11 @@ class StatusPageTests(unittest.TestCase):
         self.assertIn("HTTP 502 de loja.exemplo", page)
         self.assertIn("nenhuma ainda", page)
 
+    def test_store_note_is_shown_next_to_its_situation(self):
+        self.db.set_status("nova", state="ok", last_poll=T0 - 30, last_ok=T0 - 30, note="sem chave: cadastre o segredo PRICEMPIRE_API_KEY")
+        page = self.render()
+        self.assertIn("Funcionando (sem chave: cadastre o segredo PRICEMPIRE_API_KEY)", page)
+
     def test_link_kind_is_explained_per_store(self):
         page = self.render()
         self.assertIn("faca específica", page)

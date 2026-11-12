@@ -44,6 +44,8 @@ def render(db, sources, now, fx_rates, market_config, round_minutes=None) -> str
         situation = STATE_TEXT.get(state, "aguardando primeira consulta")
         if enabled and st.get("error") and state in ("erro", "limite"):
             situation += ": " + st["error"][:140]
+        elif enabled and st.get("note"):
+            situation += f" ({st['note'][:140]})"
         ok = f"{brasilia_time(st['last_ok'])} ({ago(now - st['last_ok'])})" if st.get("last_ok") else "nenhuma ainda"
         best = format_brl(st["best_brl"]) + " " + names.short(st.get("best_name") or "") if st.get("best_brl") is not None and enabled else "-"
         link = "faca específica" if source.link_kind == "offer" else "busca ou página do item"
