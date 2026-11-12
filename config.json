@@ -2,7 +2,7 @@
   "alertas": [
     {
       "skin": "★ Skeleton Knife | Slaughter",
-      "teto": 1700,
+      "teto": 1750,
       "comparar": "total",
       "aceitar_total_incompleto": true,
       "desgastes": [],
