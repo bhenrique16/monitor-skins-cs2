@@ -133,7 +133,8 @@ Sem cobertura: Skinport, DMarket, SkinBaron, BUFF163, YouPin898, SkinSwap, BitSk
 - `comparar`: `total` (com câmbio e taxas) ou `anunciado`.
 - `desgastes`: vazio = qualquer; ou `["FN", "MW"]` etc.
 - `stattrak`: `qualquer`, `somente` ou `sem`.
-- `lojas`: por loja, `ativa`, `taxa_percentual` (vazio/`null` = desconhecida) e `taxa_fixa`. Ids:
+- `lojas`: por loja, `ativa`, `taxa_percentual` (vazio/`null` = desconhecida), `taxa_fixa`, `spread` (câmbio da
+  loja sobre o comercial; `null` = spread do cartão) e `iof` (`0` quando a taxa já inclui o IOF). Ids:
   `dashskins_br`, `dashskins_gg`, `brskins`, `neshastore`, `csmoney`, `csfloat`, `buffmarket`, `bleik`, `steam`,
   `lisskins`, `marketcsgo`, `waxpeer`, `tradeit`, `tradeit_troca`.
 
@@ -144,6 +145,9 @@ Para outra skin, adicione outro item em `alertas` com o nome em inglês, como na
 - **Loja em reais**: preço anunciado (PIX) + taxa da loja.
 - **Loja em dólar, paga em dinheiro**: (preço + taxa da loja) × câmbio comercial, mais o spread do cartão,
   mais o IOF (3,5%).
+- **Loja em dólar paga em reais por processador local**: preço × câmbio da loja × (1 + taxa), sem IOF
+  separado. BUFF.market: 5% com IOF incluso e câmbio da loja cerca de 2,18% abaixo do comercial, calibrado
+  com um exemplo real (US$ 308 = R$ 1.762,97). CS.MONEY: preço em reais + 1%.
 - **Saldo Steam**: o preço do Mercado já inclui as taxas.
 - **Troca**: sem valor em dinheiro; o total fica incompleto.
 

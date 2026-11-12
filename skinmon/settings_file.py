@@ -67,7 +67,20 @@ def _store(raw, store_id):
         out["fee_pct"] = None if value is None else parse_pct(value)
     if "taxa_fixa" in raw:
         out["fee_fixed"] = parse_pct(raw["taxa_fixa"]) or 0.0
+    for key, field in (("spread", "spread_pct"), ("iof", "iof_pct")):
+        if key in raw:
+            out[field] = _signed(raw[key], f'config.json: "{key}" da loja "{store_id}" precisa ser um número em porcentagem ou null')
     return out
+
+
+def _signed(value, message):
+    """Percentual que pode ser negativo (câmbio da loja abaixo do comercial). None = usar o valor global."""
+    if value is None:
+        return None
+    try:
+        return float(str(value).strip().replace("%", "").replace(",", "."))
+    except ValueError:
+        raise ValueError(message) from None
 
 
 def load(path: str) -> dict:
@@ -113,10 +126,11 @@ def sync(db, cfg: dict, defaults=None) -> None:
         if store_id not in cfg["lojas"]:
             db.delete_market(store_id)
     for store_id, values in cfg["lojas"].items():
-        merged = {"enabled": True, "fee_pct": 0.0, "fee_fixed": 0.0}
+        merged = {"enabled": True, "fee_pct": 0.0, "fee_fixed": 0.0, "spread_pct": None, "iof_pct": None}
         merged.update(defaults.get(store_id, {}))
         merged.update(values)
-        db.set_market(store_id, merged["enabled"], merged["fee_pct"], merged["fee_fixed"])
+        db.set_market(store_id, merged["enabled"], merged["fee_pct"], merged["fee_fixed"],
+                      spread_pct=merged["spread_pct"], iof_pct=merged["iof_pct"])
 
     if cfg["custos"]:
         db.set("iof_pct", cfg["custos"]["iof_pct"])

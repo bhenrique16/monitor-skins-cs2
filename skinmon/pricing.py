@@ -16,6 +16,8 @@ class MarketFees:
     pay_kind: str = "dinheiro"  # dinheiro | saldo_steam | troca
     fee_pct: float | None = 0.0  # None = taxa desconhecida
     fee_fixed: float = 0.0  # na moeda da loja
+    spread_pct: float | None = None  # câmbio da loja sobre o comercial; None = spread do cartão (ajuste global)
+    iof_pct: float | None = None  # None = IOF global; 0 quando a taxa da loja já inclui o IOF
 
 
 @dataclass(frozen=True)
@@ -66,12 +68,15 @@ def estimate(price: float, currency: str, fees: MarketFees, settings: CostSettin
     total = listed_brl + store_fee
 
     if currency != "BRL" and fees.pay_kind == "dinheiro":
-        spread = total * settings.spread_pct / 100.0
-        iof = (total + spread) * settings.iof_pct / 100.0
+        spread_pct = settings.spread_pct if fees.spread_pct is None else fees.spread_pct
+        iof_pct = settings.iof_pct if fees.iof_pct is None else fees.iof_pct
+        spread = total * spread_pct / 100.0
+        iof = (total + spread) * iof_pct / 100.0
         if spread:
-            parts.append((f"Spread do cartão ({_pct(settings.spread_pct)})", spread))
+            label = "Spread do cartão" if fees.spread_pct is None else "Câmbio da loja"
+            parts.append((f"{label} ({_pct(spread_pct)})", spread))
         if iof:
-            parts.append((f"IOF ({_pct(settings.iof_pct)})", iof))
+            parts.append((f"IOF ({_pct(iof_pct)})", iof))
         total += spread + iof
 
     return Cost(

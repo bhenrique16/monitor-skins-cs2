@@ -34,8 +34,10 @@ class Runner:
     def market_config(self, source) -> dict:
         row = self.db.market_overrides().get(source.id)
         if row is None:
-            return {"enabled": source.default_enabled, "fee_pct": source.default_fee_pct, "fee_fixed": source.default_fee_fixed}
-        return {"enabled": bool(row["enabled"]), "fee_pct": row["fee_pct"], "fee_fixed": row["fee_fixed"]}
+            return {"enabled": source.default_enabled, "fee_pct": source.default_fee_pct, "fee_fixed": source.default_fee_fixed,
+                    "spread_pct": source.default_spread_pct, "iof_pct": source.default_iof_pct}
+        return {"enabled": bool(row["enabled"]), "fee_pct": row["fee_pct"], "fee_fixed": row["fee_fixed"],
+                "spread_pct": row["spread_pct"], "iof_pct": row["iof_pct"]}
 
     def cost_settings(self) -> CostSettings:
         return CostSettings(iof_pct=self.db.get_float("iof_pct", 3.5), spread_pct=self.db.get_float("spread_pct", 4.0))
@@ -66,7 +68,8 @@ class Runner:
             result = PollResult(errors=[str(exc) or exc.__class__.__name__])
         duration = int((time.monotonic() - started) * 1000)
 
-        fees = MarketFees(pay_kind=source.pay_kind, fee_pct=cfg["fee_pct"], fee_fixed=cfg["fee_fixed"] or 0.0)
+        fees = MarketFees(pay_kind=source.pay_kind, fee_pct=cfg["fee_pct"], fee_fixed=cfg["fee_fixed"] or 0.0,
+                          spread_pct=cfg.get("spread_pct"), iof_pct=cfg.get("iof_pct"))
         settings, info = self.cost_settings(), source.info()
         matched = eligible = emails = 0
         best_brl, best_name, mail_errors = None, None, []

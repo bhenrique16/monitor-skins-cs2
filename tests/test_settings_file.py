@@ -74,6 +74,48 @@ class LoadTests(unittest.TestCase):
         self.assertFalse(cfg["avisar_loja_fora_do_ar"])
 
 
+class StoreCostKeysTests(unittest.TestCase):
+    def test_spread_and_iof_per_store_are_read(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = settings_file.load(write(tmp, {"alertas": [], "lojas": {
+                "buffmarket": {"taxa_percentual": 5, "spread": -2.18, "iof": 0},
+                "csmoney": {"taxa_percentual": 1, "spread": 0, "iof": 0},
+                "csfloat": {"spread": None}}}))
+        self.assertEqual(cfg["lojas"]["buffmarket"], {"fee_pct": 5.0, "spread_pct": -2.18, "iof_pct": 0.0})
+        self.assertEqual(cfg["lojas"]["csmoney"], {"fee_pct": 1.0, "spread_pct": 0.0, "iof_pct": 0.0})
+        self.assertIsNone(cfg["lojas"]["csfloat"]["spread_pct"])
+
+    def test_sync_stores_the_overrides(self):
+        db = DB(":memory:", seed=False)
+        try:
+            settings_file.sync(db, {"alertas": [], "custos": None, "avisar_loja_fora_do_ar": True,
+                                    "lojas": {"buffmarket": {"fee_pct": 5.0, "spread_pct": -2.18, "iof_pct": 0.0}}})
+            row = db.market_overrides()["buffmarket"]
+            self.assertEqual((row["fee_pct"], row["spread_pct"], row["iof_pct"]), (5.0, -2.18, 0.0))
+        finally:
+            db.close()
+
+
+class OldDatabaseTests(unittest.TestCase):
+    def test_database_from_before_the_new_columns_is_upgraded(self):
+        import sqlite3
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "monitor.db")
+            con = sqlite3.connect(path)
+            con.execute("CREATE TABLE markets (id TEXT PRIMARY KEY, enabled INTEGER NOT NULL, fee_pct REAL, fee_fixed REAL NOT NULL DEFAULT 0)")
+            con.execute("INSERT INTO markets VALUES ('waxpeer', 0, NULL, 0)")
+            con.commit()
+            con.close()
+            db = DB(path, seed=False)
+            try:
+                row = db.market_overrides()["waxpeer"]
+                self.assertIsNone(row["spread_pct"])
+                self.assertIsNone(row["iof_pct"])
+                self.assertEqual(row["enabled"], 0)
+            finally:
+                db.close()
+
+
 class SyncTests(unittest.TestCase):
     def setUp(self):
         self.db = DB(":memory:", seed=False)

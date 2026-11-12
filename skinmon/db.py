@@ -28,7 +28,9 @@ CREATE TABLE IF NOT EXISTS markets (
     id TEXT PRIMARY KEY,
     enabled INTEGER NOT NULL,
     fee_pct REAL,
-    fee_fixed REAL NOT NULL DEFAULT 0
+    fee_fixed REAL NOT NULL DEFAULT 0,
+    spread_pct REAL,
+    iof_pct REAL
 );
 CREATE TABLE IF NOT EXISTS offers (
     alert_id INTEGER NOT NULL,
@@ -84,9 +86,17 @@ class DB:
             self._con.execute("PRAGMA journal_mode=WAL")
             self._con.execute("PRAGMA busy_timeout=30000")
         self._con.executescript(SCHEMA)
+        self._upgrade()
         if seed and self.get("seeded") is None:
             self.add_alert(*DEFAULT_ALERT)
             self.set("seeded", "1")
+
+    def _upgrade(self):
+        """Bancos criados antes das colunas de câmbio e IOF por loja ganham as colunas, sem perder dados."""
+        columns = {row["name"] for row in self._con.execute("PRAGMA table_info(markets)")}
+        for column in ("spread_pct", "iof_pct"):
+            if column not in columns:
+                self._con.execute(f"ALTER TABLE markets ADD COLUMN {column} REAL")
 
     def close(self):
         with self._lock:
@@ -158,12 +168,17 @@ class DB:
     def market_overrides(self):
         return {r["id"]: r for r in self._all("SELECT * FROM markets")}
 
-    def set_market(self, market_id, enabled, fee_pct, fee_fixed):
-        self._run(
-            "INSERT INTO markets (id, enabled, fee_pct, fee_fixed) VALUES (?, ?, ?, ?)"
-            " ON CONFLICT(id) DO UPDATE SET enabled = excluded.enabled, fee_pct = excluded.fee_pct, fee_fixed = excluded.fee_fixed",
-            (market_id, int(bool(enabled)), fee_pct, float(fee_fixed or 0)),
-        )
+    def set_market(self, market_id, enabled, fee_pct, fee_fixed, **costs):
+        """costs: spread_pct e iof_pct (None = valor global). Sem eles, os valores gravados são mantidos."""
+        columns = ["id", "enabled", "fee_pct", "fee_fixed"]
+        values = [market_id, int(bool(enabled)), fee_pct, float(fee_fixed or 0)]
+        for key in ("spread_pct", "iof_pct"):
+            if key in costs:
+                columns.append(key)
+                values.append(costs[key])
+        updates = ", ".join(f"{c} = excluded.{c}" for c in columns[1:])
+        self._run(f"INSERT INTO markets ({', '.join(columns)}) VALUES ({', '.join('?' * len(columns))})"
+                  f" ON CONFLICT(id) DO UPDATE SET {updates}", values)
 
     def delete_market(self, market_id):
         self._run("DELETE FROM markets WHERE id = ?", (market_id,))

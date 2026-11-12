@@ -12,11 +12,36 @@
   ],
   "lojas": {
     "_obs": "dashskins_br, dashskins_gg e brskins recusam o servidor do GitHub (HTTP 403, Cloudflare). Funcionam de conexão residencial.",
-    "dashskins_br": { "ativa": false },
-    "dashskins_gg": { "ativa": false },
-    "brskins": { "ativa": false },
-    "tradeit_troca": { "ativa": false },
-    "csfloat": { "ativa": true, "taxa_percentual": 2.8, "taxa_fixa": 0.30 }
+    "_obs_custos": "buffmarket: 5% com IOF incluso e câmbio da loja ~2,18% abaixo do comercial (exemplo real: US$ 308 = R$ 1.762,97). csmoney: preço em reais + 1%.",
+    "dashskins_br": {
+      "ativa": false
+    },
+    "dashskins_gg": {
+      "ativa": false
+    },
+    "brskins": {
+      "ativa": false
+    },
+    "tradeit_troca": {
+      "ativa": false
+    },
+    "csfloat": {
+      "ativa": true,
+      "taxa_percentual": 2.8,
+      "taxa_fixa": 0.3
+    },
+    "buffmarket": {
+      "ativa": true,
+      "taxa_percentual": 5,
+      "spread": -2.18,
+      "iof": 0
+    },
+    "csmoney": {
+      "ativa": true,
+      "taxa_percentual": 1,
+      "spread": 0,
+      "iof": 0
+    }
   },
   "custos": {
     "iof": 3.5,

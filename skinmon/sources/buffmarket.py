@@ -71,11 +71,15 @@ class Buffmarket(Source):
     id = "buffmarket"
     label = "BUFF.market"
     currency = "USD"
-    pay_note = "cartão internacional ou cripto"
+    pay_note = "reais pelo processador de pagamento (5% com IOF incluso)"
     link_kind = "search"
     interval = 120
     pause = 1.0
-    default_fee_pct = None
+    # Exemplo real informado: anúncio de US$ 308 saiu R$ 1.762,97 com "5% (Including IOF: 3.5%)".
+    # Câmbio da loja estimado em 2,18% abaixo do comercial a partir desse exemplo.
+    default_fee_pct = 5.0
+    default_spread_pct = -2.18
+    default_iof_pct = 0.0
     data_note = "Dados públicos por item (menor preço e 10 anúncios mais baratos com float). A busca por nome exige conta."
 
     def _get(self, url, params):

@@ -67,5 +67,30 @@ class ForeignCurrencyTests(unittest.TestCase):
         self.assertTrue(any("troca" in m for m in cost.missing))
 
 
+class StoreOverrideTests(unittest.TestCase):
+    """Lojas em dólar pagas em reais por processador local: a taxa já inclui o IOF e o câmbio é o da loja."""
+
+    def test_buff_example_of_308_dollars_costs_1762_97(self):
+        # Exemplo real: US$ 308 com "Payment system commission: 5% (Including IOF: 3.5%)" saiu R$ 1.762,97.
+        fees = MarketFees(fee_pct=5.0, spread_pct=-2.18, iof_pct=0.0)
+        cost = estimate(308.0, "USD", fees, SETTINGS, {"USD": 5.5726})
+        self.assertAlmostEqual(cost.total_brl, 1762.97, delta=0.6)
+        self.assertTrue(cost.complete)
+
+    def test_zero_spread_and_iof_add_only_the_store_fee(self):
+        cost = estimate(100.0, "USD", MarketFees(fee_pct=1.0, spread_pct=0.0, iof_pct=0.0), SETTINGS, {"USD": 5.0})
+        self.assertEqual(cost.total_brl, 505.0)
+        self.assertEqual([label for label, _ in cost.parts], ["Preço anunciado", "Taxa da loja/pagamento"])
+
+    def test_store_exchange_difference_is_labelled_as_such(self):
+        cost = estimate(100.0, "USD", MarketFees(fee_pct=0.0, spread_pct=-2.0, iof_pct=0.0), SETTINGS, {"USD": 5.0})
+        self.assertEqual(cost.parts[-1][0], "Câmbio da loja (-2%)")
+        self.assertEqual(cost.total_brl, 490.0)
+
+    def test_without_overrides_the_card_spread_and_iof_still_apply(self):
+        cost = estimate(100.0, "USD", MarketFees(fee_pct=0.0), SETTINGS, {"USD": 5.0})
+        self.assertEqual(cost.total_brl, round(500 * 1.04 * 1.035, 2))
+
+
 if __name__ == "__main__":
     unittest.main()

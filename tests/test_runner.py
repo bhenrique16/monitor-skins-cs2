@@ -117,6 +117,19 @@ class RunnerTests(unittest.TestCase):
         self.runner(source).poll_once(source)
         self.assertEqual(self.sent, [])
 
+    def test_store_cost_overrides_reach_the_estimate(self):
+        usd = Offer(source="fake", offer_id="a", name=SKIN + " (Minimal Wear)", price=100.0, currency="USD", url="https://x")
+        source = FakeSource([usd])
+        source.currency = "USD"
+        self.db.update_alert(self.alert_id, max_price=506.0)
+        runner = Runner(self.db, self.send, [source], fx_rates=lambda: {"USD": 5.0}, now=lambda: self.clock[0], log=lambda m: None)
+        runner.poll_once(source)
+        self.assertEqual(self.sent, [])  # com spread 4% e IOF 3,5%: R$ 538,20, acima do teto
+        self.db.set_market("fake", True, 1.0, 0.0, spread_pct=0.0, iof_pct=0.0)
+        self.clock[0] += 60
+        runner.poll_once(source)
+        self.assertEqual(len(self.sent), 1)  # pago em reais com 1%: R$ 505,00
+
     def test_rate_limit_backs_off_for_at_least_ten_minutes(self):
         source = FakeSource(error=net.RateLimited("https://loja.exemplo/api"))
         outcome = self.runner(source).poll_once(source)

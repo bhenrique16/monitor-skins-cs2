@@ -52,12 +52,15 @@ class PricempireCsmoney(Source):
     id = "csmoney"
     label = "CS.MONEY (via Pricempire)"
     currency = "USD"
-    pay_note = "o site cobra em reais; total estimado pelo câmbio"
+    pay_note = "reais no site, com taxa de 1%"
     link_kind = "search"
     interval = 2700  # 45 min: ~960 chamadas por mês, dentro das 1.000 do plano gratuito
     timeout = 60
     key_env = "PRICEMPIRE_API_KEY"
-    default_fee_pct = None
+    # O CS.MONEY mostra o preço em reais e cobra 1% (R$ 1.767 saiu R$ 1.785,23, exemplo real informado).
+    default_fee_pct = 1.0
+    default_spread_pct = 0.0
+    default_iof_pct = 0.0
     validated = "não validado: exige a sua chave da Pricempire"
     data_note = "Menor preço por item via API da Pricempire (precisa de PRICEMPIRE_API_KEY). Consulta a cada 45 min."
 

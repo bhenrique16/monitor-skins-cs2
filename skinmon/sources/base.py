@@ -37,6 +37,8 @@ class Source:
     default_enabled = True
     default_fee_pct: float | None = 0.0  # None = taxa desconhecida (total sai como incompleto)
     default_fee_fixed = 0.0
+    default_spread_pct: float | None = None  # câmbio próprio da loja; None = spread do cartão
+    default_iof_pct: float | None = None  # 0 quando a taxa da loja já inclui o IOF
     key_env: str | None = None  # variável de ambiente com a chave do usuário, se houver
     data_note = ""  # de onde vêm os dados e com que frequência mudam
     validated = "dados reais"  # como foi validada durante o desenvolvimento
