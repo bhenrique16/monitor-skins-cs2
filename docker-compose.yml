@@ -1,0 +1,21 @@
+services:
+  skinmon:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      SKINMON_DATA: /data
+      PANEL_HOST: 0.0.0.0
+    volumes:
+      - skinmon-data:/data
+    ports:
+      # O painel fica acessível só na própria máquina. De fora, use um túnel SSH (veja o README).
+      - "127.0.0.1:8787:8787"
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+volumes:
+  skinmon-data:

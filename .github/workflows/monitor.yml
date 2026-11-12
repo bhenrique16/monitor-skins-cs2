@@ -1,0 +1,78 @@
+name: Monitor de skins
+
+on:
+  schedule:
+    # A cada 5 minutos (mínimo do GitHub). Em repositório privado use "*/30 * * * *" para caber nos
+    # 2.000 minutos gratuitos por mês; ajuste também SKINMON_RODADA_MIN abaixo.
+    - cron: "*/5 * * * *"
+  push:
+    branches: [main]
+    paths: [config.json]  # mudou o teto: roda na hora
+  workflow_dispatch:
+    inputs:
+      teto_teste:
+        description: "Teto temporário só nesta execução (ex.: 2000). E-mails saem com [TESTE]. Vazio = rodada normal."
+        required: false
+        default: ""
+
+permissions:
+  contents: write  # para gravar o estado na branch "estado"
+
+concurrency:
+  group: monitor-de-skins
+  cancel-in-progress: false
+
+jobs:
+  rodada:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SKINMON_DATA: data
+      SKINMON_RODADA_MIN: "5"
+      SMTP_HOST: smtp.gmail.com
+      SMTP_PORT: "587"
+      SMTP_USER: ${{ secrets.SMTP_USER }}
+      SMTP_PASS: ${{ secrets.SMTP_PASS }}
+      MAIL_TO: ${{ secrets.MAIL_TO }}
+      CSFLOAT_API_KEY: ${{ secrets.CSFLOAT_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Recuperar estado da rodada anterior
+        run: |
+          mkdir -p data
+          if git fetch --quiet --depth=1 origin estado 2>/dev/null; then
+            git show FETCH_HEAD:monitor.db > data/monitor.db
+            echo "Estado recuperado."
+          else
+            echo "Primeira execução: começando sem histórico."
+          fi
+
+      - name: Consultar lojas
+        env:
+          TETO_TESTE: ${{ github.event.inputs.teto_teste }}
+        run: |
+          if [ -n "$TETO_TESTE" ]; then
+            python -m skinmon rodada --teto-teste "$TETO_TESTE"
+          else
+            python -m skinmon rodada
+          fi
+
+      - name: Gravar estado na branch "estado"
+        if: always()
+        run: |
+          [ -f data/monitor.db ] || exit 0
+          python -c "import sqlite3; c = sqlite3.connect('data/monitor.db'); c.execute('PRAGMA wal_checkpoint(TRUNCATE)'); c.close()"
+          rm -rf /tmp/estado && mkdir /tmp/estado
+          cp data/monitor.db /tmp/estado/
+          if [ -f data/STATUS.md ]; then cp data/STATUS.md /tmp/estado/README.md; fi
+          cd /tmp/estado
+          git init --quiet --initial-branch=estado
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit --quiet -m "Estado em $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push --quiet --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" estado

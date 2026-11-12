@@ -1,0 +1,65 @@
+{
+ "success": true,
+ "items": [
+  {
+   "name": "★ StatTrak™ Skeleton Knife | Slaughter (Factory New)",
+   "count": 15,
+   "min": 461948,
+   "steam_price": 513210,
+   "img": "https://images.waxpeer.com/i/730-stattrak-skeleton-knife-slaughter-factory-new.webp",
+   "type": "Knives",
+   "rarity_color": "#eb4b4b",
+   "rarity": "Covert"
+  },
+  {
+   "name": "★ StatTrak™ Skeleton Knife | Slaughter (Field-Tested)",
+   "count": 6,
+   "min": 407155,
+   "steam_price": 485940,
+   "img": "https://images.waxpeer.com/i/730-stattrak-skeleton-knife-slaughter-field-tested.webp",
+   "type": "Knives",
+   "rarity_color": "#eb4b4b",
+   "rarity": "Covert"
+  },
+  {
+   "name": "★ Skeleton Knife | Slaughter (Factory New)",
+   "count": 21,
+   "min": 394034,
+   "steam_price": 660,
+   "img": "https://images.waxpeer.com/i/730-skeleton-knife-slaughter-factory-new.webp",
+   "type": "Knives",
+   "rarity_color": "#eb4b4b",
+   "rarity": "Covert"
+  },
+  {
+   "name": "★ Skeleton Knife | Slaughter (Minimal Wear)",
+   "count": 49,
+   "min": 325660,
+   "steam_price": 400970,
+   "img": "https://images.waxpeer.com/i/730-skeleton-knife-slaughter-minimal-wear.webp",
+   "type": "Knives",
+   "rarity_color": "#eb4b4b",
+   "rarity": "Covert"
+  },
+  {
+   "name": "★ Skeleton Knife | Slaughter (Field-Tested)",
+   "count": 35,
+   "min": 333910,
+   "steam_price": 377570,
+   "img": "https://images.waxpeer.com/i/730-skeleton-knife-slaughter-field-tested.webp",
+   "type": "Knives",
+   "rarity_color": "#eb4b4b",
+   "rarity": "Covert"
+  },
+  {
+   "name": "★ StatTrak™ Skeleton Knife | Slaughter (Minimal Wear)",
+   "count": 16,
+   "min": 386880,
+   "steam_price": 480150,
+   "img": "https://images.waxpeer.com/i/730-stattrak-skeleton-knife-slaughter-minimal-wear.webp",
+   "type": "Knives",
+   "rarity_color": "#eb4b4b",
+   "rarity": "Covert"
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+ "_nota": "NAO e uma captura real: formato da documentacao publica da CSFloat (docs.csfloat.com). O endpoint exige chave, entao nao foi possivel gravar uma resposta verdadeira.",
+ "data": [
+  {
+   "id": "810000000000000001",
+   "created_at": "2026-11-11T16:58:02.311121Z",
+   "type": "buy_now",
+   "price": 29900,
+   "state": "listed",
+   "item": {
+    "asset_id": "22547095285",
+    "def_index": 525,
+    "paint_index": 59,
+    "paint_seed": 346,
+    "float_value": 0.1123,
+    "is_stattrak": false,
+    "is_souvenir": false,
+    "market_hash_name": "★ Skeleton Knife | Slaughter (Minimal Wear)",
+    "item_name": "Skeleton Knife | Slaughter",
+    "wear_name": "Minimal Wear"
+   }
+  },
+  {
+   "id": "810000000000000002",
+   "created_at": "2026-11-11T16:59:40.000000Z",
+   "type": "auction",
+   "price": 15000,
+   "state": "listed",
+   "item": {
+    "float_value": 0.2011,
+    "is_stattrak": true,
+    "market_hash_name": "★ StatTrak™ Skeleton Knife | Slaughter (Field-Tested)"
+   }
+  }
+ ],
+ "cursor": "abc"
+}

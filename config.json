@@ -1,0 +1,22 @@
+{
+  "alertas": [
+    {
+      "skin": "★ Skeleton Knife | Slaughter",
+      "teto": 1700,
+      "comparar": "total",
+      "aceitar_total_incompleto": true,
+      "desgastes": [],
+      "stattrak": "qualquer",
+      "ativo": true
+    }
+  ],
+  "lojas": {
+    "tradeit_troca": { "ativa": false },
+    "csfloat": { "ativa": true, "taxa_percentual": 2.8, "taxa_fixa": 0.30 }
+  },
+  "custos": {
+    "iof": 3.5,
+    "spread": 4.0
+  },
+  "avisar_loja_fora_do_ar": true
+}

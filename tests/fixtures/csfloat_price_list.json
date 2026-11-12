@@ -1,0 +1,37 @@
+[
+ {
+  "market_hash_name": "★ Skeleton Knife | Slaughter (Factory New)",
+  "quantity": 69,
+  "min_price": 34655
+ },
+ {
+  "market_hash_name": "★ Skeleton Knife | Slaughter (Field-Tested)",
+  "quantity": 35,
+  "min_price": 31424
+ },
+ {
+  "market_hash_name": "★ Skeleton Knife | Slaughter (Minimal Wear)",
+  "quantity": 74,
+  "min_price": 30160
+ },
+ {
+  "market_hash_name": "★ StatTrak™ Skeleton Knife | Slaughter (Factory New)",
+  "quantity": 17,
+  "min_price": 42899
+ },
+ {
+  "market_hash_name": "★ StatTrak™ Skeleton Knife | Slaughter (Field-Tested)",
+  "quantity": 2,
+  "min_price": 44999
+ },
+ {
+  "market_hash_name": "★ StatTrak™ Skeleton Knife | Slaughter (Minimal Wear)",
+  "quantity": 10,
+  "min_price": 36290
+ },
+ {
+  "market_hash_name": "AK-47 | Redline (Field-Tested)",
+  "quantity": 900,
+  "min_price": 3100
+ }
+]

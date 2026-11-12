@@ -1,0 +1,90 @@
+{
+ "items": [
+  {
+   "price": 66366,
+   "priceForTrade": 66366,
+   "name": "★ StatTrak™ Skeleton Knife | Slaughter (Minimal Wear)",
+   "score": 447108,
+   "createdAt": "2026-11-02T20:57:13.798Z",
+   "tradedAt": "2026-11-02T20:57:13.798Z",
+   "groupId": 319427,
+   "classId": "7993041925",
+   "sitePrice": 66366,
+   "onlyStore": false,
+   "storePrice": 37586,
+   "storeBasePrice": 59122,
+   "stablePrice": 37669,
+   "paintIndex": 59,
+   "isVanilla": false,
+   "hasSouvenir": false,
+   "avgDeliveryTime": [],
+   "deliveryType": [],
+   "tradeLockDay": []
+  },
+  {
+   "assetId": "54343506786",
+   "classId": "7993048310",
+   "steamId": "76561199527145575",
+   "price": 68060,
+   "priceForTrade": 68060,
+   "sitePrice": 68060,
+   "storePrice": 38584,
+   "stablePrice": 38930,
+   "botIndex": 309,
+   "floatValue": 0.2498210072517395,
+   "paintIndex": 59,
+   "isVanilla": false,
+   "patternIndex": 739,
+   "defIndex": 525,
+   "name": "★ StatTrak™ Skeleton Knife | Slaughter (Field-Tested)",
+   "colors": [
+    "#ED1B24"
+   ],
+   "urlSlug": "skeleton-knife-slaughter",
+   "score": 701960,
+   "wantedStock": 1,
+   "currentStock": 1,
+   "createdAt": "2026-11-02T20:57:15.850Z",
+   "tradedAt": "2026-11-02T20:57:15.850Z",
+   "groupId": 319921,
+   "onlyStore": false,
+   "storeBasePrice": 39314
+  },
+  {
+   "assetId": "54405187643",
+   "classId": "7993041226",
+   "steamId": "76561199428861584",
+   "price": 68460,
+   "priceForTrade": 68460,
+   "sitePrice": 68460,
+   "storePrice": 37941,
+   "stablePrice": 36025,
+   "botIndex": 253,
+   "floatValue": 0.04580835998058319,
+   "paintIndex": 59,
+   "isVanilla": false,
+   "patternIndex": 115,
+   "defIndex": 525,
+   "name": "★ Skeleton Knife | Slaughter (Factory New)",
+   "colors": [
+    "#ED1B24"
+   ],
+   "urlSlug": "skeleton-knife-slaughter",
+   "score": 673899,
+   "wantedStock": 15,
+   "currentStock": 3,
+   "createdAt": "2026-11-02T20:57:14.688Z",
+   "tradedAt": "2026-11-02T20:57:14.688Z",
+   "groupId": 318476,
+   "onlyStore": false,
+   "storeBasePrice": 48156,
+   "minFloat": 0.01,
+   "maxFloat": 0.26
+  }
+ ],
+ "counts": {
+  "318476": 1,
+  "319427": 2,
+  "319921": 1
+ }
+}

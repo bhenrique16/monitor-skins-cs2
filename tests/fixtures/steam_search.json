@@ -1,0 +1,153 @@
+{
+ "success": true,
+ "start": 0,
+ "pagesize": 10,
+ "total_count": 6,
+ "searchdata": {
+  "query": "Skeleton Knife Slaughter",
+  "total_count": 6,
+  "pagesize": 10,
+  "prefix": "searchResults",
+  "class_prefix": "market"
+ },
+ "results": [
+  {
+   "name": "★ StatTrak™ Skeleton Knife | Slaughter (Minimal Wear)",
+   "hash_name": "★ StatTrak™ Skeleton Knife | Slaughter (Minimal Wear)",
+   "sell_listings": 4,
+   "sell_price": 59122,
+   "sell_price_text": "$591.22 USD",
+   "app_name": "Counter-Strike 2",
+   "asset_description": {
+    "appid": 730,
+    "classid": "7993041925",
+    "background_color": "402d2d",
+    "tradable": 1,
+    "name": "★ StatTrak™ Skeleton Knife | Slaughter (Minimal Wear)",
+    "name_color": "eb4b4b",
+    "type": "★ StatTrak™ Covert Knife",
+    "market_name": "★ StatTrak™ Skeleton Knife | Slaughter (Minimal Wear)",
+    "market_hash_name": "★ StatTrak™ Skeleton Knife | Slaughter (Minimal Wear)",
+    "commodity": 0,
+    "market_bucket_group_name": "★ Skeleton Knife | Slaughter",
+    "market_bucket_group_id": "G188D04203B3003"
+   },
+   "sale_price_text": "$565.52 USD"
+  },
+  {
+   "name": "★ StatTrak™ Skeleton Knife | Slaughter (Field-Tested)",
+   "hash_name": "★ StatTrak™ Skeleton Knife | Slaughter (Field-Tested)",
+   "sell_listings": 2,
+   "sell_price": 49480,
+   "sell_price_text": "$494.80 USD",
+   "app_name": "Counter-Strike 2",
+   "asset_description": {
+    "appid": 730,
+    "classid": "7993048310",
+    "background_color": "402d2d",
+    "tradable": 1,
+    "name": "★ StatTrak™ Skeleton Knife | Slaughter (Field-Tested)",
+    "name_color": "eb4b4b",
+    "type": "★ StatTrak™ Covert Knife",
+    "market_name": "★ StatTrak™ Skeleton Knife | Slaughter (Field-Tested)",
+    "market_hash_name": "★ StatTrak™ Skeleton Knife | Slaughter (Field-Tested)",
+    "commodity": 0,
+    "market_bucket_group_name": "★ Skeleton Knife | Slaughter",
+    "market_bucket_group_id": "G188D04203B3003"
+   },
+   "sale_price_text": "$473.29 USD"
+  },
+  {
+   "name": "★ Skeleton Knife | Slaughter (Field-Tested)",
+   "hash_name": "★ Skeleton Knife | Slaughter (Field-Tested)",
+   "sell_listings": 10,
+   "sell_price": 43298,
+   "sell_price_text": "$432.98 USD",
+   "app_name": "Counter-Strike 2",
+   "asset_description": {
+    "appid": 730,
+    "classid": "7993044261",
+    "background_color": "402d2d",
+    "tradable": 1,
+    "name": "★ Skeleton Knife | Slaughter (Field-Tested)",
+    "name_color": "eb4b4b",
+    "type": "★ Covert Knife",
+    "market_name": "★ Skeleton Knife | Slaughter (Field-Tested)",
+    "market_hash_name": "★ Skeleton Knife | Slaughter (Field-Tested)",
+    "commodity": 0,
+    "market_bucket_group_name": "★ Skeleton Knife | Slaughter",
+    "market_bucket_group_id": "G188D04203B3003"
+   },
+   "sale_price_text": "$414.16 USD"
+  },
+  {
+   "name": "★ Skeleton Knife | Slaughter (Minimal Wear)",
+   "hash_name": "★ Skeleton Knife | Slaughter (Minimal Wear)",
+   "sell_listings": 17,
+   "sell_price": 44801,
+   "sell_price_text": "$448.01 USD",
+   "app_name": "Counter-Strike 2",
+   "asset_description": {
+    "appid": 730,
+    "classid": "7993042081",
+    "background_color": "402d2d",
+    "tradable": 1,
+    "name": "★ Skeleton Knife | Slaughter (Minimal Wear)",
+    "name_color": "eb4b4b",
+    "type": "★ Covert Knife",
+    "market_name": "★ Skeleton Knife | Slaughter (Minimal Wear)",
+    "market_hash_name": "★ Skeleton Knife | Slaughter (Minimal Wear)",
+    "commodity": 0,
+    "market_bucket_group_name": "★ Skeleton Knife | Slaughter",
+    "market_bucket_group_id": "G188D04203B3003"
+   },
+   "sale_price_text": "$428.54 USD"
+  },
+  {
+   "name": "★ StatTrak™ Skeleton Knife | Slaughter (Factory New)",
+   "hash_name": "★ StatTrak™ Skeleton Knife | Slaughter (Factory New)",
+   "sell_listings": 6,
+   "sell_price": 57316,
+   "sell_price_text": "$573.16 USD",
+   "app_name": "Counter-Strike 2",
+   "asset_description": {
+    "appid": 730,
+    "classid": "7993047979",
+    "background_color": "402d2d",
+    "tradable": 1,
+    "name": "★ StatTrak™ Skeleton Knife | Slaughter (Factory New)",
+    "name_color": "eb4b4b",
+    "type": "★ StatTrak™ Covert Knife",
+    "market_name": "★ StatTrak™ Skeleton Knife | Slaughter (Factory New)",
+    "market_hash_name": "★ StatTrak™ Skeleton Knife | Slaughter (Factory New)",
+    "commodity": 0,
+    "market_bucket_group_name": "★ Skeleton Knife | Slaughter",
+    "market_bucket_group_id": "G188D04203B3003"
+   },
+   "sale_price_text": "$548.24 USD"
+  },
+  {
+   "name": "★ Skeleton Knife | Slaughter (Factory New)",
+   "hash_name": "★ Skeleton Knife | Slaughter (Factory New)",
+   "sell_listings": 16,
+   "sell_price": 51800,
+   "sell_price_text": "$518.00 USD",
+   "app_name": "Counter-Strike 2",
+   "asset_description": {
+    "appid": 730,
+    "classid": "7993041226",
+    "background_color": "402d2d",
+    "tradable": 1,
+    "name": "★ Skeleton Knife | Slaughter (Factory New)",
+    "name_color": "eb4b4b",
+    "type": "★ Covert Knife",
+    "market_name": "★ Skeleton Knife | Slaughter (Factory New)",
+    "market_hash_name": "★ Skeleton Knife | Slaughter (Factory New)",
+    "commodity": 0,
+    "market_bucket_group_name": "★ Skeleton Knife | Slaughter",
+    "market_bucket_group_id": "G188D04203B3003"
+   },
+   "sale_price_text": "$495.48 USD"
+  }
+ ]
+}

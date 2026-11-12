@@ -1,0 +1,7 @@
+.env
+.git
+.claude
+data
+tests
+**/__pycache__
+*.md
