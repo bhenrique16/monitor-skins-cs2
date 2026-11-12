@@ -36,6 +36,7 @@ jobs:
       SMTP_PASS: ${{ secrets.SMTP_PASS }}
       MAIL_TO: ${{ secrets.MAIL_TO }}
       CSFLOAT_API_KEY: ${{ secrets.CSFLOAT_API_KEY }}
+      PRICEMPIRE_API_KEY: ${{ secrets.PRICEMPIRE_API_KEY }}
     steps:
       - uses: actions/checkout@v5
 

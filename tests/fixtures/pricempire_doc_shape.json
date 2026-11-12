@@ -1,0 +1,24 @@
+[
+ {
+  "market_hash_name": "★ Skeleton Knife | Slaughter (Minimal Wear)",
+  "count": 412,
+  "prices": [
+   {"price": 31750, "count": 58, "updated_at": "2026-11-12T16:20:00.000Z", "provider_key": "csmoney"},
+   {"price": 30940, "count": 107, "updated_at": "2026-11-12T16:25:00.000Z", "provider_key": "buffmarket"}
+  ]
+ },
+ {
+  "market_hash_name": "★ StatTrak™ Skeleton Knife | Slaughter (Field-Tested)",
+  "count": 12,
+  "prices": [
+   {"price": null, "count": null, "updated_at": null, "provider_key": "csmoney"}
+  ]
+ },
+ {
+  "market_hash_name": "AK-47 | Redline (Field-Tested)",
+  "count": 900,
+  "prices": [
+   {"price": 3100, "count": 300, "updated_at": "2026-11-12T16:20:00.000Z", "provider_key": "csmoney"}
+  ]
+ }
+]

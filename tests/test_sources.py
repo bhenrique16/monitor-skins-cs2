@@ -3,7 +3,7 @@ import json
 import os
 import unittest
 
-from skinmon.sources import bleik, brskins, csfloat, dashskins_br, dashskins_gg, lisskins, marketcsgo, neshastore, steam, tradeit, waxpeer
+from skinmon.sources import bleik, brskins, buffmarket, csfloat, dashskins_br, dashskins_gg, lisskins, marketcsgo, neshastore, pricempire, steam, tradeit, waxpeer
 
 FIX = os.path.join(os.path.dirname(__file__), "fixtures")
 SKIN = "★ Skeleton Knife | Slaughter"
@@ -260,6 +260,122 @@ class NeshastoreTests(unittest.TestCase):
         o = by_id(neshastore.parse(payload, now=self.NOW))["54515379259"]
         self.assertEqual(o.link_kind, "search")
         self.assertTrue(o.url.startswith("https://neshastore.com/"))
+
+
+class BuffmarketTests(unittest.TestCase):
+    def setUp(self):
+        from skinmon import net
+        from skinmon.models import Alert
+        from skinmon.sources.base import Ctx
+
+        self.net, self.Ctx, self.Alert = net, Ctx, Alert
+        self.fix = load("buffmarket.json")
+        self.calls = []
+
+    def fetch(self, url, **kw):
+        self.calls.append(url)
+        if url.startswith(buffmarket.INFO):
+            payload = self.fix["info_mw"] if "Minimal%20Wear" in url and "StatTrak" not in url else self.fix["info_missing"]
+        else:
+            payload = self.fix["sell_order"]
+        return self.net.Response(200, {}, json.dumps(payload).encode())
+
+    def test_info_gives_item_id_minimum_and_count(self):
+        self.assertEqual(buffmarket.parse_info(self.fix["info_mw"]), (1569, 309.4, 107))
+
+    def test_unknown_variant_gives_nothing(self):
+        self.assertIsNone(buffmarket.parse_info(self.fix["info_missing"]))
+
+    def test_sell_orders_become_individual_offers_with_float(self):
+        offers = buffmarket.parse_orders(self.fix["sell_order"], SKIN + " (Minimal Wear)")
+        self.assertEqual(len(offers), 4)
+        o = offers[0]
+        self.assertEqual(o.offer_id, "1091009811-1B1B-137406502")
+        self.assertEqual(o.price, 309.4)
+        self.assertEqual(o.currency, "USD")
+        self.assertAlmostEqual(o.float_value, 0.1364775449037552)
+        self.assertFalse(o.aggregated)
+        self.assertEqual(o.link_kind, "search")
+        self.assertEqual(o.url, "https://buff.market/market/goods/cs2/%E2%98%85%20Skeleton%20Knife%20%7C%20Slaughter%20%28Minimal%20Wear%29")
+
+    def test_candidate_names_follow_the_alert_filters(self):
+        alert = self.Alert(id=1, name=SKIN, max_price=1700.0, wears=("FN", "MW"), stattrak="any")
+        self.assertEqual(buffmarket.candidate_names(alert), [
+            "★ Skeleton Knife | Slaughter (Factory New)", "★ StatTrak™ Skeleton Knife | Slaughter (Factory New)",
+            "★ Skeleton Knife | Slaughter (Minimal Wear)", "★ StatTrak™ Skeleton Knife | Slaughter (Minimal Wear)",
+        ])
+        plain = self.Alert(id=2, name="AK-47 | Redline", max_price=100.0, wears=("FT",), stattrak="exclude")
+        self.assertEqual(buffmarket.candidate_names(plain), ["AK-47 | Redline (Field-Tested)"])
+
+    def test_variant_near_the_ceiling_gets_its_cheapest_listings(self):
+        source = buffmarket.Buffmarket(env={}, fetch=self.fetch, sleep=lambda s: None)
+        alert = self.Alert(id=1, name=SKIN, max_price=1700.0)
+        offers = source.search(alert, self.Ctx(fx={"USD": 5.5}))  # 309,40 × 5,5 = 1.701,70: perto do teto
+        self.assertEqual(sum(1 for c in self.calls if c.startswith(buffmarket.ORDERS)), 1)
+        self.assertIn("goods_id=1569", [c for c in self.calls if c.startswith(buffmarket.ORDERS)][0])
+        self.assertEqual(len(offers), 4)
+        self.assertTrue(all(not o.aggregated for o in offers))
+
+    def test_variant_far_from_the_ceiling_keeps_only_the_reference_minimum(self):
+        source = buffmarket.Buffmarket(env={}, fetch=self.fetch, sleep=lambda s: None)
+        alert = self.Alert(id=1, name=SKIN, max_price=1000.0)
+        offers = source.search(alert, self.Ctx(fx={"USD": 5.5}))
+        self.assertFalse(any(c.startswith(buffmarket.ORDERS) for c in self.calls))
+        self.assertEqual(len(offers), 1)
+        self.assertTrue(offers[0].aggregated)
+        self.assertEqual(offers[0].price, 309.4)
+        self.assertEqual(offers[0].quantity, 107)
+
+
+class PricempireCsmoneyTests(unittest.TestCase):
+    """Formato da documentação pública da Pricempire; não é captura real (exige a sua chave)."""
+
+    def setUp(self):
+        from skinmon import net
+        from skinmon.models import Alert
+        from skinmon.sources.base import Ctx
+
+        self.net, self.Ctx = net, Ctx
+        self.alert = Alert(id=1, name=SKIN, max_price=1700.0)
+        self.calls = []
+
+    def fetch(self, url, **kw):
+        self.calls.append((url, kw.get("headers") or {}))
+        return self.net.Response(200, {}, json.dumps(load("pricempire_doc_shape.json")).encode())
+
+    def test_csmoney_minimum_is_read_in_dollars_with_its_timestamp(self):
+        offers = pricempire.parse(load("pricempire_doc_shape.json"), [SKIN])
+        self.assertEqual(len(offers), 1)
+        o = offers[0]
+        self.assertEqual(o.source, "csmoney")
+        self.assertEqual(o.name, SKIN + " (Minimal Wear)")
+        self.assertEqual(o.price, 317.50)
+        self.assertEqual(o.currency, "USD")
+        self.assertEqual(o.quantity, 58)
+        self.assertTrue(o.aggregated)
+        self.assertEqual(o.link_kind, "search")
+        self.assertEqual(o.data_time, 1_794_500_400.0)  # 12/11/2026 16:20 UTC
+        self.assertTrue(o.url.startswith("https://cs.money/market/buy/?"))
+
+    def test_request_uses_the_key_and_asks_only_for_csmoney(self):
+        source = pricempire.PricempireCsmoney(env={"PRICEMPIRE_API_KEY": "chave"}, fetch=self.fetch, sleep=lambda s: None)
+        result = source.poll([self.alert], self.Ctx(fx={"USD": 5.5}))
+        url, headers = self.calls[0]
+        self.assertIn("sources=csmoney", url)
+        self.assertEqual(headers.get("Authorization"), "Bearer chave")
+        self.assertEqual(len(result.offers[1]), 1)
+
+    def test_without_key_nothing_is_requested(self):
+        source = pricempire.PricempireCsmoney(env={}, fetch=self.fetch, sleep=lambda s: None)
+        ctx = self.Ctx(fx={"USD": 5.5})
+        result = source.poll([self.alert], ctx)
+        self.assertEqual(self.calls, [])
+        self.assertEqual(result.errors, [])
+        self.assertTrue(any("PRICEMPIRE_API_KEY" in n for n in ctx.notes))
+
+    def test_interval_fits_the_free_monthly_quota(self):
+        source = pricempire.PricempireCsmoney(env={"PRICEMPIRE_API_KEY": "chave"})
+        self.assertLessEqual(30 * 86400 / source.interval, 1000)
 
 
 class DataAgeTests(unittest.TestCase):

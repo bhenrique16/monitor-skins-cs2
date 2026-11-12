@@ -57,6 +57,7 @@ git remote add origin https://github.com/SEU-USUARIO/monitor-skins-cs2.git; git 
 | `SMTP_PASS` | senha de app do Gmail (https://myaccount.google.com/apppasswords) |
 | `MAIL_TO` | e-mail que recebe os alertas |
 | `CSFLOAT_API_KEY` | opcional: chave da CSFloat |
+| `PRICEMPIRE_API_KEY` | opcional: chave da Pricempire, para o CS.MONEY |
 
 4. Na aba **Actions**, se aparecer, clique em "I understand my workflows, go ahead and enable them".
 
@@ -80,6 +81,8 @@ sair nenhum e-mail repetido.
 | DashSkins.gg | API pública do site | 1 min | faca específica | PIX |
 | BRSKINS | API pública do site (cache de 60 s) | 1 min | faca específica | PIX |
 | NeshaStore | API pública do site | 1 min | faca específica | PIX |
+| CS.MONEY (via Pricempire) | API da Pricempire com a sua chave grátis; menor preço por item | 45 min | busca no CS.MONEY | reais (PIX ou cartão) |
+| BUFF.market | dados públicos por item (menor preço e 10 anúncios mais baratos com float) | 2 min | página do item | cartão ou cripto |
 | CSFloat com chave | API oficial | 1 min | faca específica | cartão internacional |
 | CSFloat sem chave | lista pública de menor preço, renovada ~1 vez por hora | 10 min | busca (exige login) | cartão internacional |
 | Bleik Store | página pública do produto | 5 min | página da skin | PIX |
@@ -90,13 +93,22 @@ sair nenhum e-mail repetido.
 | Tradeit.gg (loja) | inventário público | 2 min | busca | cartão ou cripto |
 | Tradeit.gg (troca) | inventário público | 2 min | busca | troca, vem desligada |
 
+**Validação a partir do GitHub (12/11/2026, duas execuções):** DashSkins.com.br, DashSkins.gg e BRSKINS
+responderam HTTP 403 (proteção Cloudflare contra robôs) ao servidor do GitHub; de conexão residencial
+funcionam. Por isso vêm desligadas no `config.json`. Todas as outras lojas responderam, e o e-mail pelo
+Gmail saiu.
+
 No GitHub, o intervalo real é o maior entre o da loja e o da agenda (5 min). Lojas com link de busca ou
 página do item informam só o menor preço: o e-mail diz **preço de referência** e, se o dado da loja tiver
 mais de 10 minutos, mostra o horário em que a loja gerou o preço.
 
-Sem cobertura: CS.MONEY Market (a API dos anúncios em dinheiro recusa clientes automáticos com HTTP 403;
-a Pricempire acompanha a loja, mas a API custa US$ 119,90 por mês), Skinport, DMarket, SkinBaron,
-BUFF.market, BUFF163, YouPin898, SkinSwap, BitSkins e HaloSkins.
+CS.MONEY: a API da loja recusa clientes automáticos (HTTP 403, código 4030). A cobertura vem da
+Pricempire, que tem API oficial; o plano Trader é gratuito (1.000 chamadas por mês, "acesso limitado").
+Crie a conta em https://pricempire.com, pegue a chave na área da API e cadastre o segredo
+`PRICEMPIRE_API_KEY`. Sem a chave, essa loja fica parada. Ainda não validei com dados reais nem se o plano
+gratuito inclui o CS.MONEY.
+
+Sem cobertura: Skinport, DMarket, SkinBaron, BUFF163, YouPin898, SkinSwap, BitSkins e HaloSkins.
 
 ### Chave da CSFloat
 
@@ -122,8 +134,8 @@ BUFF.market, BUFF163, YouPin898, SkinSwap, BitSkins e HaloSkins.
 - `desgastes`: vazio = qualquer; ou `["FN", "MW"]` etc.
 - `stattrak`: `qualquer`, `somente` ou `sem`.
 - `lojas`: por loja, `ativa`, `taxa_percentual` (vazio/`null` = desconhecida) e `taxa_fixa`. Ids:
-  `dashskins_br`, `dashskins_gg`, `brskins`, `neshastore`, `csfloat`, `bleik`, `steam`, `lisskins`,
-  `marketcsgo`, `waxpeer`, `tradeit`, `tradeit_troca`.
+  `dashskins_br`, `dashskins_gg`, `brskins`, `neshastore`, `csmoney`, `csfloat`, `buffmarket`, `bleik`, `steam`,
+  `lisskins`, `marketcsgo`, `waxpeer`, `tradeit`, `tradeit_troca`.
 
 Para outra skin, adicione outro item em `alertas` com o nome em inglês, como na Steam.
 
