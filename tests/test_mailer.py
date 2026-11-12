@@ -1,7 +1,7 @@
 import unittest
 from dataclasses import replace
 
-from skinmon.mailer import AlertItem, brasilia_time, delivery_text, format_brl, format_money, render_alert
+from skinmon.mailer import AlertItem, brasilia_time, delivery_text, format_brl, format_money, mask_address, render_alert
 from skinmon.models import Alert, MarketInfo, Offer
 from skinmon.pricing import CostSettings, MarketFees, estimate
 
@@ -57,6 +57,19 @@ class ReferencePriceTests(unittest.TestCase):
     def test_fresh_store_data_does_not_show_its_age(self):
         _, text, _ = render_alert(ALERT, DASH, [item(data_time=NOW - 60)], NOW)
         self.assertNotIn("Dados da loja de", text)
+
+
+class MaskAddressTests(unittest.TestCase):
+    """O destino gravado no banco não pode expor o e-mail (o banco fica no GitHub)."""
+
+    def test_local_part_is_hidden(self):
+        self.assertEqual(mask_address("fulano.silva@gmail.com"), "f***@gmail.com")
+
+    def test_several_recipients_are_all_masked(self):
+        self.assertEqual(mask_address("a@x.com, bob@y.com"), "a***@x.com, b***@y.com")
+
+    def test_text_without_address_is_kept(self):
+        self.assertEqual(mask_address("arquivo data/outbox/x.html"), "arquivo data/outbox/x.html")
 
 
 class DeliveryTextTests(unittest.TestCase):

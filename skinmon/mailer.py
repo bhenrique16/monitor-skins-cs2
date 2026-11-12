@@ -304,6 +304,11 @@ Monitor de skins de CS2. Loja consultada em {escape(when)}, horário de Brasíli
     return subject, text, html
 
 
+def mask_address(text: str) -> str:
+    """Esconde a parte local dos e-mails ("f***@gmail.com"): o destino vai para o banco, que fica no GitHub."""
+    return re.sub(r"([A-Za-z0-9])[A-Za-z0-9._%+-]*@", lambda m: m.group(1) + "***@", text)
+
+
 def delivery_text(dest: str) -> str:
     """Descreve o destino devolvido por Mailer.send, sem dizer "enviado" quando só houve gravação em arquivo."""
     if dest.startswith("arquivo "):
@@ -395,7 +400,7 @@ class Mailer:
                     server.quit()
                 except Exception:
                     pass
-            return self.to
+            return mask_address(self.to)
 
     def _write(self, subject: str, html: str) -> str:
         os.makedirs(self.outbox, exist_ok=True)
