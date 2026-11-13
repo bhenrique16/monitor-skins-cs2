@@ -3,10 +3,23 @@ name: Monitor de skins
 on:
   schedule:
     # Repositório público: a cada 5 minutos (mínimo do GitHub), minutos grátis e ilimitados.
-    # Se o repositório voltar a ser privado, use "*/30 * * * *" e SKINMON_RODADA_MIN "30" para caber nos
-    # ~2.000 minutos gratuitos por mês.
-    # Minutos 2, 7, 12...: o GitHub recomenda evitar o início da hora, quando as execuções agendadas atrasam mais.
-    - cron: "2-59/5 * * * *"
+    # Se o repositório voltar a ser privado, use um cron só, "*/30 * * * *", e SKINMON_RODADA_MIN "30" para
+    # caber nos ~2.000 minutos gratuitos por mês.
+    # Experimento de 13/11/2026: um cron só a cada 5 minutos ("2-59/5 * * * *") rendeu 3 rodadas em 22 horas,
+    # enquanto crons horários de outros repositórios disparavam em dia. Por isso são 12 crons horários, um
+    # por minuto 2, 7, 12... 57 (fora do início da hora, quando as execuções agendadas atrasam mais).
+    - cron: "2 * * * *"
+    - cron: "7 * * * *"
+    - cron: "12 * * * *"
+    - cron: "17 * * * *"
+    - cron: "22 * * * *"
+    - cron: "27 * * * *"
+    - cron: "32 * * * *"
+    - cron: "37 * * * *"
+    - cron: "42 * * * *"
+    - cron: "47 * * * *"
+    - cron: "52 * * * *"
+    - cron: "57 * * * *"
   push:
     branches: [main]
     paths: [config.json]  # mudou o teto: roda na hora
